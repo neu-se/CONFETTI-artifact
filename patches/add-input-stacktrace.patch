@@ -1,0 +1,131 @@
+diff --git a/fuzz/pom.xml b/fuzz/pom.xml
+index 495ebdb..68beb74 100644
+--- a/fuzz/pom.xml
++++ b/fuzz/pom.xml
+@@ -15,6 +15,11 @@
+     <packaging>jar</packaging>
+ 
+     <dependencies>
++        <dependency>
++            <groupId>org.apache.bcel</groupId>
++            <artifactId>bcel</artifactId>
++            <version>6.2</version>
++        </dependency>
+         <dependency>
+             <groupId>junit</groupId>
+             <artifactId>junit</artifactId>
+diff --git a/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/ei/ZestGuidance.java b/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/ei/ZestGuidance.java
+index a6b65de..1b30a1f 100644
+--- a/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/ei/ZestGuidance.java
++++ b/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/ei/ZestGuidance.java
+@@ -69,6 +69,14 @@ import edu.berkeley.cs.jqf.instrument.tracing.events.ReturnEvent;
+ import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
+ import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEventVisitor;
+ 
++
++import org.apache.bcel.classfile.JavaClass;
++import org.w3c.dom.Document;
++import javax.xml.transform.*;
++import javax.xml.transform.dom.DOMSource;
++import javax.xml.transform.stream.StreamResult;
++
++
+ import static java.lang.Math.ceil;
+ import static java.lang.Math.log;
+ 
+@@ -724,6 +732,15 @@ public class ZestGuidance implements Guidance, TraceEventVisitor {
+                     String saveFileName = String.format("id_%06d", crashIdx);
+                     File saveFile = new File(savedFailuresDirectory, saveFileName);
+                     writeCurrentInputToFile(saveFile);
++
++                    File traceFile = new File(savedFailuresDirectory, saveFileName + ".trace");
++                    try (PrintWriter pw = new PrintWriter(new FileWriter(traceFile))) {
++                        error.printStackTrace(pw);
++                    }
++                    File argsFile = new File(savedFailuresDirectory, saveFileName + ".input");
++                    for (Object o : args)
++                        saveInputToDisk(argsFile, o);
++
+                     infoLog("%s","Found crash: " + error.getClass() + " - " + (msg != null ? msg : ""));
+                     String how = currentInput.desc;
+                     String why = result == Result.FAILURE ? "+crash" : "+hang";
+@@ -812,6 +829,41 @@ public class ZestGuidance implements Guidance, TraceEventVisitor {
+ 
+     }
+ 
++    private Object[] args;
++
++    @Override
++    public void setArgs(Object[] args) {
++        this.args = args;
++    }
++
++    private void saveInputToDisk(File f, Object o) throws IOException {
++        if (o instanceof Document) {
++            try {
++                TransformerFactory tf = TransformerFactory.newInstance();
++                Transformer transformer = null;
++                transformer = tf.newTransformer();
++                transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
++                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
++                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
++                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
++                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
++
++                try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
++                    transformer.transform(new DOMSource((Document) o), new StreamResult(pw));
++                }
++            } catch (TransformerException e) {
++                e.printStackTrace();
++            }
++        } else if (o instanceof JavaClass) {
++            JavaClass jc = (JavaClass) o;
++            jc.dump(f);
++        } else {
++            try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
++                pw.println(o.toString());
++            }
++        }
++    }
++
+     private void saveCurrentInput(Set<Object> responsibilities, String why) throws IOException {
+ 
+         // First, save to disk (note: we issue IDs to everyone, but only write to disk  if valid)
+@@ -824,6 +876,10 @@ public class ZestGuidance implements Guidance, TraceEventVisitor {
+             infoLog("Saved - %s %s %s", saveFile.getPath(), how, why);
+         }
+ 
++        File inputFile = new File(savedInputsDirectory, saveFileName + ".input");
++        for (Object o : args)
++            saveInputToDisk(inputFile, o);
++
+         // If not using guidance, do nothing else
+         if (blind) {
+             return;
+diff --git a/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/guidance/Guidance.java b/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/guidance/Guidance.java
+index 5c0e17f..85dda1b 100644
+--- a/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/guidance/Guidance.java
++++ b/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/guidance/Guidance.java
+@@ -144,6 +144,8 @@ public interface Guidance {
+      */
+     void handleResult(Result result, Throwable error) throws GuidanceException;
+ 
++    default void setArgs(Object[] args) { /* empty */ }
++
+     /**
+      * Returns a callback generator for a thread's event trace.
+      *
+diff --git a/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/junit/quickcheck/FuzzStatement.java b/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/junit/quickcheck/FuzzStatement.java
+index 89bb9cd..9cca64e 100644
+--- a/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/junit/quickcheck/FuzzStatement.java
++++ b/fuzz/src/main/java/edu/berkeley/cs/jqf/fuzz/junit/quickcheck/FuzzStatement.java
+@@ -139,6 +139,9 @@ public class FuzzStatement extends Statement {
+                         args = generators.stream()
+                                 .map(g -> g.generate(random, genStatus))
+                                 .toArray();
++
++                        guidance.setArgs(args);
++
+                     } catch (IllegalStateException e) {
+                         if (e.getCause() instanceof EOFException) {
+                             // This happens when we reach EOF before reading all the random values.

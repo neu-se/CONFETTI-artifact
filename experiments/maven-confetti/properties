@@ -1,0 +1,12 @@
+#path.filter=org/apache/maven/model/io/xpp3,org/codehaus/plexus/util,quickcheck,serializer
+path.filter=org/codehaus/plexus/util,quickcheck,serializer
+#string.hints=NONE
+#string.hints=GLOBAL
+#string.hints=PER_INPUT
+string.hints=PER_BYTE
+#constraintsPath=/home/jamesk/Documents/constraints
+useInvalid=true
+usez3Hints=true
+useConstraints=true
+
+constraintsPath=experiment-constraints

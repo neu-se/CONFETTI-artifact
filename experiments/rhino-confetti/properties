@@ -1,0 +1,11 @@
+path.filter=quickcheck,Token,parsing/parser/
+#string.hints=NONE
+#string.hints=GLOBAL
+#string.hints=PER_INPUT
+string.hints=PER_BYTE
+#constraintsPath=/home/jamesk/Documents/constraints
+useInvalid=true
+usez3Hints=true
+useConstraints=true
+
+constraintsPath=experiment-constraints
