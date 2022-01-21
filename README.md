@@ -95,7 +95,43 @@ These graphs are generated in two steps:
 2. Build the actual plots, using R: run `Rscript scripts/graphCoverage-fig2.R`. You can disregard the warning messages. 5 PDFs will be output to the current directory: `(ant,bcelgen,closure,maven,rhino)_branches_over_time.pdf`
 
 ### Table 2: Bug detectability rate
-This table is built based on the manual analysis of figures discussed above in the context of Table 1.
+This table is built based on the manual analysis of figures discussed above in the context of Table 1. A more detailed description of the bugs, along with a link to their respective issue tracker (where applicable for newly discovered bugs), is included in the table below. 
+
+In order to properly compare against the state-of-the-art (JQF+Zest) we elected to test against the same version of software that the authors did, which was an earlier version than the most current release of the respective software at the time of publication. Becauses of this, some newly discovered bugs (N-Days) were unable to be replicated in the latest release of the respective target and were not reported to developers. However, all stacktraces are included in this artifact for completeness.
+
+| Bug ID        | Target   |Description   | Status/ Issue Tracker Link|
+| ------------- | ------------- |-------------------| -------------------|
+| A1		  	| Apache Ant    |java.lang.IllegalStateException  |	Previously discovered by JQF+Zest |
+| B1            | Apache BCEL   | org.apache.bcel.classfile.ClassFormatException  |	 Previously discovered by JQF+Zest				 | 
+| B2            | Apache BCEL   | org.apache.bcel.verifier.exc.AssertionViolatedException  |	 Previously discovered by JQF+Zest				 |
+| B3            | Apache BCEL   | java.lang.IllegalArgumentException  |	 Open Issue: https://issues.apache.org/jira/projects/BCEL/issues/BCEL-358			 | 
+| B4            | Apache BCEL   | org.apache.bcel.verifier.exc.AssertionViolatedException  |	 Unreported, could not replicate in latest version				 |
+| B5            | Apache BCEL   | java.lang.StringIndexOutOfBoundsException  |	 Open Issue: https://issues.apache.org/jira/browse/BCEL-357		 | 
+| B6            | Apache BCEL   | org.apache.bcel.generic.ClassGenException  |	 Open Issue: https://issues.apache.org/jira/browse/BCEL-359				 |
+| C1            | Google Closure   | java.lang.NullPointerException  |	Previously discovered by JQF+Zest		 | 
+| C2            | Google Closure   | java.lang.NullPointerException  |	 Previously discovered by JQF+Zest				 |
+| C3            | Google Closure   | java.lang.NullPointerException  				|	Previously discovered by JQF+Zest		 | 
+| C4            | Google Closure   | java.lang.NullPointerException  |	 Closed (fixed) Issue: https://github.com/google/closure-compiler/issues/3455				 |
+| C5            | Google Closure   | java.lang.NullPointerException  |	Closed (fixed) Issue: https://github.com/google/closure-compiler/issues/3375		 | 
+| C6            | Google Closure   | java.lang.IllegalArgumentException  |	 Unreported, could not replicate in latest version				 |
+| C7            | Google Closure   | java.lang.RuntimeException  |	Acknowledged Issue: https://github.com/google/closure-compiler/issues/3591		 | 
+| C8            | Google Closure   |  java.lang.NullPointerException |	 Acknowledged Issue: https://github.com/google/closure-compiler/issues/3861				 |
+| C9            | Google Closure   | java.lang.IllegalStateException  			|	Previously discovered by JQF+Zest		 | 
+| C10           | Google Closure   | java.lang.RuntimException  |	 Unreported, could not replicate in latest version			 |
+| C11           | Google Closure   | java.lang.IllegalStateException  |	Acknowledged Issue: https://github.com/google/closure-compiler/issues/3860		 | 
+| C12           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3858				 |
+| C13           | Google Closure   | java.lang.IllegalStateException  |	Closed Issue: https://github.com/google/closure-compiler/issues/3857		 | 
+| C14           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3859	
+| C15           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3380			 |
+| C16           | Google Closure   | java.lang.IllegalStateException  |	Unreported, could not replicate in latest version		 | 
+| C17           | Google Closure   | java.lang.IllegalStateException  |	 Unreported, could not replicate in latest version				 |
+| C18           | Google Closure   | java.lang.IllegalStateException  |	Unreported, could not replicate in latest version		 | 
+| R1          | Mozilla Rhino   | java.lang.ClassCastException  |	Previously discovered by JQF+Zest		 | 
+| R2           | Mozilla Rhino   | java.lang.IllegalStateException  |	Previously discovered by JQF+Zest		 | 
+| R3           | Mozilla Rhino   | java.lang.VerifyError  |	Previously discovered by JQF+Zest		 | 
+| R4           | Mozilla Rhino  | java.lang.NullPointerException  |	Previously discovered by JQF+Zest		 | 
+| R5          | Mozilla Rhino   | java.lang.ArrayIndexOutOfBoundsException  |	Previously discovered by JQF+Zest		 | 
+
 
 ### Table 3: Inputs generated by mutation strategy and Table 4: Analysis of all saved inputs with global hints
 
