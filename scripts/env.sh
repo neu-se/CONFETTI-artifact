@@ -9,7 +9,7 @@ export WGET="$(which wget) -nc"
 export ROOT=/home/icse22ae/confetti-artifact
 
 # Location of fuzz_output
-export FUZZ_OUTPUT=/home/icse22ae/icse_22_fuzz_output
+export FUZZ_OUTPUT=/home/icse22ae/confetti-artifact/icse_22_fuzz_output
 
 
 if [ -z "$ROOT" ]; then
