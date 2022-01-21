@@ -18,7 +18,7 @@
     $resultDir = getenv("FUZZ_OUTPUT");
     $jqfDir = getenv("JQF_DIR");
     $jqfVanillaDir = getenv("JQF_VANILLA_DIR");
-    $cmds = "";
+    // $cmds = "";
     foreach($benchmarks as $bm => $config){
         //print "=======$bm=======\n";
         $knarrDirs = glob($resultDir."/*".$bm."-".$configKnarr."-*.tgz");
@@ -29,8 +29,9 @@
             $thisExp = [];
             $batches = [];
 			$outputFile = $experiment.".forensics-1k.csv";
-		//	$cmds.= "EXP_NAME=$exp APP_NAME=$bm TRIALS=100 bash $jqfDir/scripts/evaluate_extended_dict.sh ".$config["class"]. " ". $config['method']. " " .$outputFile." $experiment/corpus/ \n";
-			$cmds.= "EXP_NAME=$exp APP_NAME=$bm TRIALS=1000 bash /experiment/confetti/evaluate_extended_dict_wrapper.sh ".$config["class"]. " ". $config['method']. " " .$outputFile." $experiment \n";
+			$cmd = "EXP_NAME=$exp APP_NAME=$bm TRIALS=1000 bash /home/icse22ae/confetti-artifact/scripts/evaluate_extended_dict_wrapper.sh ".$config["class"]. " ". $config['method']. " " .$outputFile." $experiment \n";
+            echo $cmd;
+            echo `$cmd`;
 
         }
     }

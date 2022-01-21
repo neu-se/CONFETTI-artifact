@@ -6,8 +6,7 @@ library(plyr)
 library(dplyr)
 options(scipen=999)
 
-forensics <- ldply(Sys.glob("../../forensics/*.forensics-1k.csv"), read.csv, header=TRUE)
-
+forensics <- ldply(Sys.glob("/home/icse22ae/confetti-artifact/icse_22_forensics_output/*.forensics-1k.csv"), read.csv, header=TRUE)
 forensics$numStringsTotal <- forensics$inputSizeBytes
 
 forensics$numGlobalDictHintsPerByte <- forensics$numGlobalDictHints/forensics$inputSizeBytes
@@ -20,7 +19,7 @@ forensics$numAnyStrGuidancePerString <- (forensics$numStringHints + forensics$nu
 forensics$experiment <- as.factor(forensics$experiment)
 forensics$app <- as.factor(forensics$app)
 
-fuzz_stats <- read_csv("../../fuzz_stats.csv")
+fuzz_stats <- read_csv("/home/icse22ae/confetti-artifact/generated/fuzz_stats.csv")
 fuzz_stats$experiment <- as.factor(fuzz_stats$experiment)
 fuzz_stats$bm <- as.factor(fuzz_stats$bm)
 

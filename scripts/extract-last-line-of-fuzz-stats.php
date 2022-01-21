@@ -29,9 +29,12 @@
 	$lastCov = 0;
 
     $resultDir = getenv("FUZZ_OUTPUT");
-    if(!file_exists($outputDir)){
-		mkdir($outputDir);
+    if($resultDir == ""){
+        die("Please be sure to source scripts/env.sh in this artifact before running this command\n")
     }
+    // if(!file_exists($outputDir)){
+		// mkdir($outputDir);
+    // }
 	$res = "bm,experiment,unix_time, cycles_done, cur_path, paths_total, pending_total, pending_favs, map_size, unique_crashes, unique_hangs, max_depth, execs_per_sec, total_inputs, mutated_bytes, valid_inputs, invalid_inputs, all_cov, z3, inputsSavedBy_StrHint, inputsCreatedBy_StrHint, inputsSavedBy_MultipleStrHint, inputsCreatedBy_MultipleStrHint, inputsSavedBy_CharHint, inputsCreatedBy_CharHint, inputsSavedBy_Z3, inputsCreatedBy_Z3, inputsSavedBy_Random, inputsCreatedBy_Random, inputsSavedWith_Hints, inputsSavedWith_Z3Origin, inputsSavedWithoutHintsOrZ3,countOfSavedInputsWithExtendedDictionaryHints,countOfCreatedInputsWithExtendedDictionaryHints,extendedDictionarySize\n";
     foreach($benchmarks as $bm => $config){
         $kd = glob($resultDir."/*".$bm."-".$configKnarr."-*.tgz");
@@ -46,5 +49,8 @@
 			$res .= "$bm,$n,$lastLine\n";
 		}
     }
-	file_put_contents("fuzz_stats.csv",$res);
+    if(!is_dir("/home/icse22ae/confetti-artifact/generated")){
+        mkdir("/home/icse22ae/confetti-artifact/generated");
+    }
+	file_put_contents("/home/icse22ae/confetti-artifact/generated/fuzz_stats.csv",$res);
 ?>
