@@ -9,9 +9,15 @@ library(viridis)
 library(gridExtra)
 library(forcats)
 
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)!=1) {
+  stop("Error. Exactly one argument required: the input directory with coverage data")
+}
+coverageDir <- args[1]
+
 bms <- c('ant', 'bcelgen', 'maven', 'closure', 'rhino')
 targets <- c('knarr-z3-no-global-hint','knarr-z3', 'jqf')
-files<-basename(Sys.glob("/home/icse22ae/confetti-artifact/generated/coverage/*-coverage.csv"))
+files<-basename(Sys.glob(paste0(coverageDir,"/*-coverage.csv")))
 getBm <- function(filename){
   for(bm in bms){
     if(grepl(bm, filename))
@@ -39,7 +45,8 @@ read_coverage <- function(filename){
 }
 
 
-cov <- ldply(Sys.glob("/home/icse22ae/confetti-artifact/generated/coverage/*-coverage.csv"), read_coverage)
+cov <- ldply(Sys.glob(paste0(coverageDir,"/*-coverage.csv")), read_coverage)
+# cov <- ldply(Sys.glob("/home/icse22ae/confetti-artifact/generated/coverage/*-coverage.csv"), read_coverage)
 cov$experiment <- as.factor(cov$experiment)
 cov$bm <- as.factor(cov$bm)
 cov$config <- as.factor(cov$config)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RES=$RESULTS_DIR/maven-confetti-no-global-hint
+RES=$RESULTS_DIR/maven-knarr-z3-no-global-hint
 export NO_GLOBAL_DICT=TRUE
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

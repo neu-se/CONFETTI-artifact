@@ -6,8 +6,14 @@ library(plyr)
 library(dplyr)
 options(scipen=999)
 
-forensics <- ldply(Sys.glob("../../forensics/*.forensics-1k.csv"), read.csv, header=TRUE)
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)!=2) {
+  stop("Usage: Rscript scripts/tabularize-forensics-tables3and4.R fuzzStatsCSVFile forensicsOutputDir")
+}
+fuzzStatsCSVFileName <- args[1]
+forensicsOutputDir <- args[2]
 
+forensics <- ldply(Sys.glob(paste0(forensicsOutputDir, "/*.forensics-1k.csv")), read.csv, header=TRUE)
 forensics$numStringsTotal <- forensics$inputSizeBytes
 
 forensics$numGlobalDictHintsPerByte <- forensics$numGlobalDictHints/forensics$inputSizeBytes
@@ -20,7 +26,7 @@ forensics$numAnyStrGuidancePerString <- (forensics$numStringHints + forensics$nu
 forensics$experiment <- as.factor(forensics$experiment)
 forensics$app <- as.factor(forensics$app)
 
-fuzz_stats <- read_csv("../../fuzz_stats.csv")
+fuzz_stats <- read_csv(fuzzStatsCSVFileName)
 fuzz_stats$experiment <- as.factor(fuzz_stats$experiment)
 fuzz_stats$bm <- as.factor(fuzz_stats$bm)
 
@@ -55,10 +61,10 @@ totalsByExperiment <- forensics %>% group_by(app,experiment) %>% summarize(input
 
 
 
-write.csv(totalsByExperiment,file = "knarr-forensics-exp.csv")
+# write.csv(totalsByExperiment,file = "knarr-forensics-exp.csv")
 
 totalsByApp <- totalsByExperiment %>% select(-experiment) %>% group_by(app) %>%  summarise_all(sum) 
-write.csv(totalsByApp,file = "knarr-forensics-app.csv")
+# write.csv(totalsByApp,file = "knarr-forensics-app.csv")
 
 totalsPrint <- merge(grouped_stats,totalsByApp,by.x="bm",by.y="app")
 totalsPrint$successRate.z3 <- paste(round(totalsPrint$successRate.z3, digits=2),"%", sep="")
