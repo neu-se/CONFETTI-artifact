@@ -64,9 +64,24 @@ The left side of this table (branch coverage) is built by using the script `scri
 This script takes as input the tgz archives of each of the results directories produced from the fuzzing campaign (e.g. the files in `icse_22_fuzz_output`) and automates the procedure of collecting branch coverage using JaCoCo.
 To execute the script, run `php scripts/reproCorpusAndGetJacocoTGZ.php icse_22_fuzz_output` - note that our experience is that this script can take an hour to run. Expected output is shown in the file `tool_output/reproCorpusAndGetJacocoTGZ.txt`. Note that due to non-determinism, we have noticed that the exact number of branches covered might vary by one or two on repeated runs.
 
-The right side of this table (bugs found) is built by manually inspecting the failures detected by each fuzzer, de-duplicating them, and reporting them to developers.
+The right side of this table (bugs found) is built by manually inspecting the failures detected by each fuzzer, de-duplicating them, and reporting them to developers. 
+We have included a tarball of all failures for the 20 run trials included in the CONFETTI paper at the following URL **TODO INCLUDE THE URL**, as well as our de-duplicating script. 
+Our de-duplicating script uses a stacktrace heuristic to de-duplicate bugs. CONFETTI itself has some de-duplication features within the source code, but JQF+Zest has minimal, resulting in many of the same issues being saved. 
+Our simple heuristic is effective at de-duplicating bugs (particularly in the case of JQF+Zest and Closure, which de-duplicates thousands of failures to single digits). 
+However, some manual analysis is still needed, as a shortcoming of a stack analysis heuristic is that two crashes may share the same root cause, despite manifesting in different ways. 
 
-**TODO: Include list of failures here**
+Before running the de-duplication script, ensure that you have Python 3 installed on your machine. 
+You may access the tarball of failures from the CONFETTI experiments by downloading them from the following URL: **TODO URL**.
+Afterwards, you may perform the de-duplication by running `scripts/unique.py` as follows
+
+`python3 scripts/unique.py /path/to/failures.tgz`
+
+This will create a directory within the `scripts/` directory called `bugs`. 
+The failures within the tarball will be de-duplicated and the `bugs` directory will create a directory hierarchy corresponding to the target+fuzzer, the bug class, and the trials which found that bug. 
+The de-duplication script will also print the number of unique bugs (according to our heuristic) that were found for each target+fuzzer configuration.
+Please keep in mind that running the de-duplication script could take several hours, as there are thousands of failures per run (particularly in Closure and Rhino) that require de-duplication.
+We conducted manual analysis by examining the output directories from this script to determine if the unique bugs were or were not attributed to the same root cause. 
+The result of the manual analysis is shown in Tables 1 and 2 in the paper.
 
 ### Figure 3: Graphs of branch coverage over time
 These graphs are generated in two steps:
@@ -76,7 +91,7 @@ These graphs are generated in two steps:
 ### Table 2: Bug detectability rate
 This table is built based on the manual analysis of figures discussed above in the context of Table 1. A more detailed description of the bugs, along with a link to their respective issue tracker (where applicable for newly discovered bugs), is included in the table below. 
 
-In order to properly compare against the state-of-the-art (JQF+Zest) we elected to test against the same version of software that the authors did, which was an earlier version than the most current release of the respective software at the time of publication. Becauses of this, some newly discovered bugs (N-Days) were unable to be replicated in the latest release of the respective target and were not reported to developers. However, all stacktraces are included in this artifact for completeness.
+In order to properly compare against the state-of-the-art (JQF+Zest) we elected to test against the same version of software that the authors did, which was an earlier version than the most current release of the respective software at the time of publication. Becauses of this, some newly discovered bugs (N-Days) were unable to be replicated in the latest release of the respective target and were not reported to developers. However, all stacktraces are included in this artifact for completeness (as discussed in the Table 1 section above).
 
 | Bug ID        | Target   |Description   | Status/ Issue Tracker Link|
 | ------------- | ------------- |-------------------| -------------------|
