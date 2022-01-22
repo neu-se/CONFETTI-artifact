@@ -103,7 +103,8 @@ The right side of this table (bugs found) is built by manually inspecting the fa
 
 🕒 *Shorter run option* 🕒 Collecting JaCoCo coverage from the 10 minute trials takes approximately 5-10 minutes. To collect the coverage, run `php scripts/reproCorpusAndGetJacocoTGZ.php local_eval_output`. 
 
-**TODO: Include list of failures here**
+
+**TODO: Include list of failures here** directory is `icse-22-final-failures`
 
 ### Figure 3: Graphs of branch coverage over time
 These graphs are generated in two steps:
