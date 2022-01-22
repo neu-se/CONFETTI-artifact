@@ -32,7 +32,7 @@ if($argc != 3){
 	die('Usage: php runOneExperiment.php <evalScript> <experimentName>
 	
 	Where evalScript is one of: (benchmark)-(fuzzer), for valid combinations of:
-		benchmark (ant, bcelgen, closure, maven, rhino), fuzzer (jqf,confetti,confetti-no-global-hint)
+		benchmark (ant, bcelgen, closure, maven, rhino), fuzzer (jqf,knarr-z3,knarr-z3-no-global-hint)
 
 	experimentName is a string that you can choose, and will be included in the output file names.
 

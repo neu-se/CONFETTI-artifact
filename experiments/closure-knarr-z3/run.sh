@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RES=$RESULTS_DIR/closure-confetti
+RES=$RESULTS_DIR/closure-knarr-z3
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 export EXP_CP="`$CLOSURE_DIR/classpath.sh`"

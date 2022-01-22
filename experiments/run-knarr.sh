@@ -31,7 +31,9 @@ fi
 
 # How long to run the experiment (seconds)
 #DURATION=$((60*60*24))
-DURATION=$((60*60*24))
+if [ -z "$DURATION" ]; then
+    DURATION=$((60*60*24))
+fi
 #DURATION=$((60*2))
 echo $DURATION
 

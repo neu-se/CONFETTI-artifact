@@ -8,3 +8,8 @@ README.pdf
 *_over_time.pdf
 tool_output
 vendor
+debug
+debug-preinst
+prebake*
+downloads
+local_eval_output

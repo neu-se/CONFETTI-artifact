@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RES=$RESULTS_DIR/maven-confetti
+RES=$RESULTS_DIR/maven-knarr-z3
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 export EXP_CP="`$MAVEN_DIR/classpath.sh`"

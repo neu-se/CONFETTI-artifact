@@ -1,6 +1,7 @@
 #!/bin/bash
 
-RES=$RESULTS_DIR/bcelgen-confetti
+RES=$RESULTS_DIR/bcelgen-knarr-z3-no-global-hint
+export NO_GLOBAL_DICT=TRUE
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 export EXP_CP="`$BCEL_DIR/classpath.sh`"

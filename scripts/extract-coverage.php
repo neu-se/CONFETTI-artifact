@@ -1,4 +1,9 @@
 <?php
+if($argc != 3)
+	die("Usage: php extract-coverage.php primaryDataInputDir intermediateDataOutputDir");
+
+$inputDir = $argv[1];
+$outputDir = $argv[2];
     $configVanilla = "jqf";
     $configKnarr = "knarr-z3";
     $configKnarrNoDict = "knarr-z3-no-global-hint";
@@ -81,9 +86,8 @@
     }
 
 	$root = getenv("ROOT");
-    $resultDir = getenv("FUZZ_OUTPUT");
-    $localDir = "$root/generated/coverage-tmp";
-    $outputDir = "$root/generated/coverage";
+    $resultDir = $inputDir;
+    $localDir = "$root/coverage-tmp";
     if(!file_exists($outputDir)){
 	mkdir($outputDir);
     }

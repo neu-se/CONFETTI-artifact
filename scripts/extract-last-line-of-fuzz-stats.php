@@ -30,7 +30,7 @@
 
     $resultDir = getenv("FUZZ_OUTPUT");
     if($resultDir == ""){
-        die("Please be sure to source scripts/env.sh in this artifact before running this command\n")
+        die("Please be sure to source scripts/env.sh in this artifact before running this command\n");
     }
     // if(!file_exists($outputDir)){
 		// mkdir($outputDir);

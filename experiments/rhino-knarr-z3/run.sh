@@ -1,8 +1,6 @@
 #!/bin/bash
 
-RES=$RESULTS_DIR/rhino-confetti-no-global-hint
-export NO_GLOBAL_DICT=TRUE
-
+RES=$RESULTS_DIR/rhino-knarr-z3
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 export EXP_CP="`$RHINO_DIR/classpath.sh`"

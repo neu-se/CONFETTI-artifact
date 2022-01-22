@@ -1,8 +1,9 @@
 #!/bin/bash
 
-RES=$RESULTS_DIR/ant-confetti
+RES=$RESULTS_DIR/ant-knarr-z3-no-global-hint
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+export NO_GLOBAL_DICT=TRUE
 export EXP_CP="`$ANT_DIR/classpath.sh`"
 export EXP_CMD="edu.berkeley.cs.jqf.examples.ant.ProjectBuilderTest testWithGenerator $RES"
 export EXP_KNARR_CP="`$ANT_DIR/../ant-inst/classpath.sh`"
