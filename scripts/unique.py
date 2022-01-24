@@ -100,7 +100,12 @@ for fname in fnames:
 # Print out information about bugs for each project
 for project in projects:
     i=0
-    print("Found %d unique bugs for project %s" % (len(bugs[project]), project))
+    try:
+        print("Found %d unique bugs for project %s" % (len(bugs[project]), project))
+    except KeyError:
+        print("Found 0 unique bugs for project %s" % (project))
+        continue
+
     for b,fs in bugs[project].items():
         i += 1
         cwd = os.path.join(outputdir,project,b)
