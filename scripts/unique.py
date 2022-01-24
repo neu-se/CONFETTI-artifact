@@ -18,7 +18,7 @@ projects = ["ant-knarr-z3",
             "bcelgen-knarr-z3",
             "bcelgen-jqf",
             "bcelgen-knarr-z3-no-global-hint",
-            "closure-knarr-z3"
+            "closure-knarr-z3",
             "closure-jqf",
             "closure-knarr-z3-no-global-hint",
             "maven-knarr-z3",
