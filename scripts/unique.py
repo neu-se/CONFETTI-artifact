@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Command line arguments:  tar.gz files
+# Command line arguments:  Directory containing CONFETTI result tarballs
 
 import sys
 import tarfile
@@ -18,7 +18,7 @@ projects = ["ant-knarr-z3",
             "bcelgen-knarr-z3",
             "bcelgen-jqf",
             "bcelgen-knarr-z3-no-global-hint",
-            "closure-knarr-z3",
+            "closure-knarr-z3"
             "closure-jqf",
             "closure-knarr-z3-no-global-hint",
             "maven-knarr-z3",
@@ -36,11 +36,17 @@ bugs = {}
 
 shutil.rmtree(outputdir,True)
 
-for fname in sys.argv[1:]:
+fnames =[]
+for project in projects:
+    for i in range(1,21):
+        fnames.append(os.path.join(sys.argv[1], "%s-%d.tgz" % (project, i)))
+
+
+
+for fname in fnames:
     print(fname)
     with tarfile.open(fname) as tgz:
         for project in projects:
-            bugs = {}
             for tgzfile in tgz.getmembers():
                 # Is this file in the archive a fail?
                 if not failregex.match(tgzfile.name):
@@ -48,8 +54,14 @@ for fname in sys.argv[1:]:
                 if not project in tgzfile.name:
                     continue
                 elif project in tgzfile.name:
-                    if "-no-global-hint" in tgzfile.name and "no-global-hint" not in project:
+                    if "-no-global-hint" in tgzfile.name and "-no-global-hint" not in project:
                         continue
+                    if "-no-global-hint" in project and "-no-global-hint" not in tgzfile.name:
+                        continue
+
+                if project not in bugs:
+                    bugs[project] = {}
+
                 #print(tgzfile.name)
                 with tgz.extractfile(tgzfile.name) as f:
                     # hash the contents of the fail trace
@@ -68,12 +80,13 @@ for fname in sys.argv[1:]:
                     cwd = os.path.join(outputdir,project,md5,"")
 
                     # use hash to reason about the uniqueness of the fail
-                    if md5 in bugs:
-                        b = bugs[md5]
+                    if md5 in bugs[project]:
+                        b = bugs[project][md5]
                     else:
                         b = []
-                        bugs[md5] = b
-                        os.makedirs(cwd)
+                        bugs[project][md5] = b
+                        if not os.path.exists(cwd):
+                            os.makedirs(cwd)
 
                     # extract stacktrace to the correct dir
                     tgz.extract(tgzfile, cwd)
@@ -81,13 +94,17 @@ for fname in sys.argv[1:]:
                     tgz.extract(re.sub(r'\.trace$', '.input', tgzfile.name), cwd)
                     # register failure in our index
                     b.append(tgzfile.name)
+            
 
-            print("Found %d unique bugs for project %s" % (len(bugs), project))
 
-            i=0
-            for b,fs in bugs.items():
-                i += 1
-                cwd = os.path.join(outputdir,project,b,"final-failures")
-                #print(cwd)
+# Print out information about bugs for each project
+for project in projects:
+    i=0
+    print("Found %d unique bugs for project %s" % (len(bugs[project]), project))
+    for b,fs in bugs[project].items():
+        i += 1
+        cwd = os.path.join(outputdir,project,b)
+        #print(cwd)
 
-                print("Bug {} was found {} times".format(b, len(next(os.walk(cwd))[1])))
+        print("Bug {} was found {} times".format(b, len(next(os.walk(cwd))[1])))
+    print("\n\n")

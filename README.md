@@ -111,9 +111,10 @@ However, some manual analysis is still needed, as a shortcoming of a stack analy
 
 Before running the de-duplication script, ensure that you have Python 3 installed on your machine. 
 You may access the tarball of failures from the CONFETTI experiments by downloading them from the following URL: **TODO URL**.
+Firstly, extract the tarball.
 Afterwards, you may perform the de-duplication by running `scripts/unique.py` as follows
 
-`python3 scripts/unique.py /path/to/failures.tgz`
+`python3 scripts/unique.py /path/to/failures/directory`
 
 This will create a directory within the `scripts/` directory called `bugs`. 
 The failures within the tarball will be de-duplicated and the `bugs` directory will create a directory hierarchy corresponding to the target+fuzzer, the bug class, and the trials which found that bug. 
