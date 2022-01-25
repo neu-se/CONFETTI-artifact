@@ -1,4 +1,10 @@
 <?php
+if($argc != 3)
+die("Usage: php extract-coverage.php primaryDataInputDir intermediateDataOutputDir");
+
+$resultDir = $argv[1];
+$outputFile = $argv[2];
+
     $configKnarr = "knarr-z3";
     $benchmarks = [
         "ant" => ["class" => "ant.ProjectBuilderTest", "method" => "testWithGenerator",
@@ -28,7 +34,6 @@
 	$covCol = -1;
 	$lastCov = 0;
 
-    $resultDir = getenv("FUZZ_OUTPUT");
     if($resultDir == ""){
         die("Please be sure to source scripts/env.sh in this artifact before running this command\n");
     }
@@ -49,8 +54,5 @@
 			$res .= "$bm,$n,$lastLine\n";
 		}
     }
-    if(!is_dir("/home/icse22ae/confetti-artifact/generated")){
-        mkdir("/home/icse22ae/confetti-artifact/generated");
-    }
-	file_put_contents("/home/icse22ae/confetti-artifact/generated/fuzz_stats.csv",$res);
+	file_put_contents($outputFile,$res);
 ?>
