@@ -183,6 +183,8 @@ Table 3 needs the collected statistics from each fuzzing run's `plot_data` file.
 
 For example, to process the ICSE 22 results, run `php scripts/extract-last-line-of-fuzz-stats.php icse_22_fuzz_output generatedFuzzStats.csv`. This is expected to take 5-10 minutes, depending on the speed of your machine: it needs to process all of the big `.tgz` files in the `icse_22_fuzz_output` directory. 
 
+<!-- This script creates a directory called `generated` and will place a file called `fuzz_stats.csv` -->
+
 #### For Table 4:
 This table presents the results of an experiment to attempt to reproduce each of the inputs that CONFETTI generated that had been interesting at the time that they were generated (that is, running the input resulted in new branch probes being covered), but without using the global hints. This experiment is very time-intensive, and we estimate that it takes approximately 5-10 days to run (we did not record the exact duration of the experiment since timing information was not relevant to the RQ). 
 
@@ -190,7 +192,7 @@ This experiment takes as input a fuzzing corpus (the inputs saved by the fuzzer)
 
 To run this experiment, run the command: `php scripts/collectExtendedHintInfo.php fuzzOutputDir forensicsOutputDir`, following the same conventions from the above scripts for setting `fuzzOutputDir`. There may be a considerable amount of output from this script. 🎂 *Pre-bake available* 🎂 The forensics files generated from our ICSE 22 experiment are in the `prebake_icse22_forensics` directory. 
 
-🕒 *Shorter run option* 🕒 Runnign this experiment on the 10 minute experiment dataset takes just a few minutes. To run it, execute the command `php scripts/collectExtendedHintInfo.php local_eval_output shorter_forensics_output` (use `prebake_shorter_fuzz_output` if you didn't spend the 3 hours to generate the local_eval_output).
+🕒 *Shorter run option* 🕒 Runnign this experiment on the 10 minute experiment dataset takes just a few minutes. To run it, execute the command `php scripts/collectExtendedHintInfo.php local_eval_output shorter_forensics_output` (use `prebake_shorter_fuzz_output` along with `prebake_shorter_forensics_output` if you didn't spend the 3 hours to generate the local_eval_output).
 
 ## Continous Integration Artifact
 
