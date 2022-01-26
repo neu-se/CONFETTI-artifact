@@ -123,6 +123,10 @@ Please keep in mind that running the de-duplication script could take several ho
 We conducted manual analysis by examining the output directories from this script to determine if the unique bugs were or were not attributed to the same root cause. 
 The result of the manual analysis is shown in Tables 1 and 2 in the paper.
 
+
+🎂 *Pre-bake available* 🎂 The entire de-duplication script will take several hours to run. However, we have included a pre-run output directory located at **insert directory here**.
+This directory is organizd by fuzzer+target, and subdirectories of failure hashes that the de-duplication script deemed to be unique. This directory is what we based our manual analysis upon.
+
 ### Figure 3: Graphs of branch coverage over time
 These graphs are generated in two steps:
 
