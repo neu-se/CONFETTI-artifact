@@ -13,6 +13,8 @@ A continuous integration artifact likely has an enormous number of external depe
 
 Reviewers of this artifact should:
 * Have VirtualBox or VMWare available to run our VM. It requires 4 CPU cores, 32GB RAM, and the disk image is XXX GB.
+* We recommend using VirtualBox over VMWare
+* In either solution, reviewers need to create a new VM (Linux 64bit) as specified above, and attach the provided VMDK as the first storage device (e.g. SATA port 0 on VirtualBox)
 
 Ideally, reviewers might also consider checking to see whether they can build and run CONFETTI directly on their local machines and run a short (3-5 minute) fuzzing campaign, to validate that this simpler development model is also possible. The requirements for running CONFETTI directly on a machine are:
 * Mac OS X or Linux (we have tested extensively with Ubuntu, other versions are sure to work, but may require manually installing the correct [release of z3 version 4.6 for the OS](https://github.com/Z3Prover/z3))
