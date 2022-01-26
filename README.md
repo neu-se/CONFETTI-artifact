@@ -106,19 +106,16 @@ To execute the script, run `php scripts/reproCorpusAndGetJacocoTGZ.php icse_22_f
 
 
 The right side of this table (bugs found) is built by manually inspecting the failures detected by each fuzzer, de-duplicating them, and reporting them to developers. 
-We have included a tarball of all failures for the 20 run trials included in the CONFETTI paper at the following URL **TODO INCLUDE THE URL**, as well as our de-duplicating script. 
+The failures are collected from the `fuzz_output` directory and processed by a de-duplicating script.
 Our de-duplicating script uses a stacktrace heuristic to de-duplicate bugs. CONFETTI itself has some de-duplication features within the source code, but JQF+Zest has minimal, resulting in many of the same issues being saved. 
 Our simple heuristic is effective at de-duplicating bugs (particularly in the case of JQF+Zest and Closure, which de-duplicates thousands of failures to single digits). 
 However, some manual analysis is still needed, as a shortcoming of a stack analysis heuristic is that two crashes may share the same root cause, despite manifesting in different ways. 
 
-Before running the de-duplication script, ensure that you have Python 3 installed on your machine. 
-You may access the tarball of failures from the CONFETTI experiments by downloading them from the following URL: **TODO URL**.
-Firstly, extract the tarball.
-Afterwards, you may perform the de-duplication by running `scripts/unique.py` as follows
+Once you have a fuzzing corpus (e.g. from a local run that you completed, or using the 🎂 pre-bake results🎂 ), you may perform the de-duplication by running `scripts/unique.py` as follows
 
-`python3 scripts/unique.py /path/to/failures/directory`
+`python3 scripts/unique.py fuzzOutputDir outputDirectory`
 
-This will create a directory within the `scripts/` directory called `bugs`. 
+For example, to analyze the fuzzing corpus that we reported on in our ICSE 22 paper and save the output to `bugs`, run the command  `python3 scripts/unique.py icse_22_fuzz_output bugs`.
 The failures within the tarball will be de-duplicated and the `bugs` directory will create a directory hierarchy corresponding to the target+fuzzer, the bug class, and the trials which found that bug. 
 The de-duplication script will also print the number of unique bugs (according to our heuristic) that were found for each target+fuzzer configuration.
 Please keep in mind that running the de-duplication script could take several hours, as there are thousands of failures per run (particularly in Closure and Rhino) that require de-duplication.
@@ -126,8 +123,9 @@ We conducted manual analysis by examining the output directories from this scrip
 The result of the manual analysis is shown in Tables 1 and 2 in the paper.
 
 
-🎂 *Pre-bake available* 🎂 The entire de-duplication script will take several hours to run. However, we have included a pre-run output directory located at **insert directory here**.
-This directory is organizd by fuzzer+target, and subdirectories of failure hashes that the de-duplication script deemed to be unique. This directory is what we based our manual analysis upon.
+🎂 *Pre-bake available* 🎂 The entire de-duplication script will take several hours to run. However, we have included a pre-run output directory located at `prebake_icse22_bugs`. This directory is organizd by fuzzer+target, and subdirectories of failure hashes that the de-duplication script deemed to be unique. This directory is what we based our manual analysis upon.
+
+🕒 *Shorter run option* 🕒 The de-duplicating script finishes in a matter of seconds on the 10 minute experiment, you can run it by passing either the `prebake_shorter_fuzz_output` to use our 🎂 pre-bake results 🎂, or `local_fuzz_output` if you ran your own campaign.
 
 ### Figure 3: Graphs of branch coverage over time
 These graphs are generated in two steps:
@@ -187,8 +185,6 @@ The usage of this Rscript is: `Rscript scripts/tabularize-forensics-tables3and4.
 Table 3 needs the collected statistics from each fuzzing run's `plot_data` file. Run the script `scripts/extract-last-line-of-fuzz-stats.php fuzzOutputDir outputFilename`, where `fuzzOutputDir` is the collected fuzzing results (e.g. `icse_22_fuzz_output`, `local_eval_output`, `prebake_shorter_fuzz_output`), and `outputFilename` is a name you choose to use as the input to become `fuzzStatsCSVFile` above.
 
 For example, to process the ICSE 22 results, run `php scripts/extract-last-line-of-fuzz-stats.php icse_22_fuzz_output generatedFuzzStats.csv`. This is expected to take 5-10 minutes, depending on the speed of your machine: it needs to process all of the big `.tgz` files in the `icse_22_fuzz_output` directory. 
-
-<!-- This script creates a directory called `generated` and will place a file called `fuzz_stats.csv` -->
 
 #### For Table 4:
 This table presents the results of an experiment to attempt to reproduce each of the inputs that CONFETTI generated that had been interesting at the time that they were generated (that is, running the input resulted in new branch probes being covered), but without using the global hints. This experiment is very time-intensive, and we estimate that it takes approximately 5-10 days to run (we did not record the exact duration of the experiment since timing information was not relevant to the RQ). 

@@ -46,10 +46,9 @@ execAndLog("Confirming jqf-vanilla revision", "git -C $BASE_DIR/software/jqf-van
 
 
 $screenName = "exp-$expName-$startTime";
-$extraArgs = "DURATION=600";
 execAndLog("Running the experiment in screen. If you want to 
 snoop on the run, in another shell run `screen -r $screenName` (do not terminate it though!)",
-	"$extraArgs screen -S '$screenName' -d -m bash -c \"$BASE_DIR/experiments/$script/run.sh\"");
+	"screen -S '$screenName' -d -m bash -c \"$BASE_DIR/experiments/$script/run.sh\"");
 print "Waiting for screen to terminate\n";
 $running = true;
 while($running){

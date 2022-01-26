@@ -10,7 +10,7 @@ import os
 import shutil
 
 failregex  = re.compile('.*(failures.*).trace')
-outputdir = 'bugs'
+outputdir = sys.argv[2]
 
 projects = ["ant-knarr-z3",
             "ant-jqf",
@@ -35,7 +35,6 @@ maxdepth=3
 bugs = {}
 
 shutil.rmtree(outputdir,True)
-outputDir = sys.argv[2]
 
 print("Saving results to " + sys.argv[2])
 
@@ -47,6 +46,8 @@ for project in projects:
 
 
 for fname in fnames:
+    if not os.path.exists(fname):
+        continue
     print(fname)
     with tarfile.open(fname) as tgz:
         for project in projects:
