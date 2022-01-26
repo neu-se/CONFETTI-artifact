@@ -13,6 +13,8 @@ A continuous integration artifact likely has an enormous number of external depe
 
 Reviewers of this artifact should:
 * Have VirtualBox or VMWare available to run our VM. It requires 4 CPU cores, 32GB RAM, and the disk image is XXX GB.
+* We recommend using VirtualBox over VMWare
+* In either solution, reviewers need to create a new VM (Linux 64bit) as specified above, and attach the provided VMDK as the first storage device (e.g. SATA port 0 on VirtualBox)
 
 Ideally, reviewers might also consider checking to see whether they can build and run CONFETTI directly on their local machines and run a short (3-5 minute) fuzzing campaign, to validate that this simpler development model is also possible. The requirements for running CONFETTI directly on a machine are:
 * Mac OS X or Linux (we have tested extensively with Ubuntu, other versions are sure to work, but may require manually installing the correct [release of z3 version 4.6 for the OS](https://github.com/Z3Prover/z3))
@@ -83,7 +85,7 @@ We have also included a script, `scripts/runOneExperiment.php`, that we used to 
 
 🎂 *Pre-bake available* 🎂 The results presented in our paper are the result of running each of these experiments 20 times for 24 hour each. We include the raw results produced by running our `scripts/runOneExperiment.php` script in the directory `icse_22_fuzz_output`.  You can also download these results direclty from our [FigShare artifact](https://doi.org/10.6084/m9.figshare.16563776), they are included int he archive `fuzz_output.tgz`. In these result files, note that the name "Knarr-z3" is used in place of "CONFETTI" and "Knarr-z3-no-global-hint" in place of "CONFETTI no global hints" - in our early experiments we also considered a variety of other system designs, Knarr-z3 was the design that eventually evolved into CONFETTI.
 
-🕒 *Shorter run option* 🕒 The smallest experiment that will generate any meaningful results requires ~3 hours to run, and will execute 1 trial of each fuzzer on each fuzzing target, for 10 minutes each. You can run this shorter trial, and then use these results for the data processing pipelines to generate the tables and graphs. To run this experiment, run the command `./scripts/runSmokeTest.sh`. The results will be output to the directory `local_eval_output`. For other durations, you can edit the timeout in `runSmokeTest.sh` - it is specified in seconds.
+🕒 *Shorter run option* 🕒 The smallest experiment that will generate any meaningful results requires ~3 hours to run, and will execute 1 trial of each fuzzer on each fuzzing target, for 10 minutes each. You can run this shorter trial, and then use these results for the data processing pipelines to generate the tables and graphs. To run this experiment, run the command `./scripts/runSmokeTest.sh`. The results will be output to the directory `local_eval_output`. For other durations, you can edit the timeout in `runOneSmokeTest.sh` - it is specified in seconds through variable `DURATION`.
 
 We saved a copy of the output of a successful run of this script to `tool_output/runSmokeTest.sh.out`, and the resulting fuzzing results to `prebake_shorter_fuzz_output`.
 
@@ -123,6 +125,10 @@ Please keep in mind that running the de-duplication script could take several ho
 We conducted manual analysis by examining the output directories from this script to determine if the unique bugs were or were not attributed to the same root cause. 
 The result of the manual analysis is shown in Tables 1 and 2 in the paper.
 
+
+🎂 *Pre-bake available* 🎂 The entire de-duplication script will take several hours to run. However, we have included a pre-run output directory located at **insert directory here**.
+This directory is organizd by fuzzer+target, and subdirectories of failure hashes that the de-duplication script deemed to be unique. This directory is what we based our manual analysis upon.
+
 ### Figure 3: Graphs of branch coverage over time
 These graphs are generated in two steps:
 
@@ -150,17 +156,14 @@ In order to properly compare against the state-of-the-art (JQF+Zest) we elected 
 | C2            | Google Closure   | java.lang.NullPointerException  |	 Previously discovered by JQF+Zest				 |
 | C3            | Google Closure   | java.lang.NullPointerException  				|	Previously discovered by JQF+Zest		 | 
 | C4            | Google Closure   | java.lang.NullPointerException  |	 Closed (fixed) Issue: https://github.com/google/closure-compiler/issues/3455				 |
-| C5            | Google Closure   | java.lang.NullPointerException  |	Closed (fixed) Issue: https://github.com/google/closure-compiler/issues/3375		 | 
+| C5            | Google Closure   | java.lang.NullPointerException  |	Closed (fixed) Issue: https://github.com/google/closure-compiler/issues/3375 (also https://github.com/google/closure-compiler/issues/3380)		 | 
 | C6            | Google Closure   | java.lang.IllegalArgumentException  |	 Unreported, could not replicate in latest version				 |
 | C7            | Google Closure   | java.lang.RuntimeException  |	Acknowledged Issue: https://github.com/google/closure-compiler/issues/3591		 | 
 | C8            | Google Closure   |  java.lang.NullPointerException |	 Acknowledged Issue: https://github.com/google/closure-compiler/issues/3861				 |
 | C9            | Google Closure   | java.lang.IllegalStateException  			|	Previously discovered by JQF+Zest		 | 
 | C10           | Google Closure   | java.lang.RuntimException  |	 Unreported, could not replicate in latest version			 |
-| C11           | Google Closure   | java.lang.IllegalStateException  |	Acknowledged Issue: https://github.com/google/closure-compiler/issues/3860		 | 
-| C12           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3858				 |
+| C11           | Google Closure   | java.lang.IllegalStateException  |	Acknowledged Issue: https://github.com/google/closure-compiler/issues/3860 (also https://github.com/google/closure-compiler/issues/3858, https://github.com/google/closure-compiler/issues/3859 )	 | 
 | C13           | Google Closure   | java.lang.IllegalStateException  |	Closed Issue: https://github.com/google/closure-compiler/issues/3857		 | 
-| C14           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3859	
-| C15           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3380			 |
 | C16           | Google Closure   | java.lang.IllegalStateException  |	Unreported, could not replicate in latest version		 | 
 | C17           | Google Closure   | java.lang.IllegalStateException  |	 Unreported, could not replicate in latest version				 |
 | C18           | Google Closure   | java.lang.IllegalStateException  |	Unreported, could not replicate in latest version		 | 
@@ -169,7 +172,9 @@ In order to properly compare against the state-of-the-art (JQF+Zest) we elected 
 | R3           | Mozilla Rhino   | java.lang.VerifyError  |	Previously discovered by JQF+Zest		 | 
 | R4           | Mozilla Rhino  | java.lang.NullPointerException  |	Previously discovered by JQF+Zest		 | 
 | R5          | Mozilla Rhino   | java.lang.ArrayIndexOutOfBoundsException  |	Previously discovered by JQF+Zest		 | 
-
+<!-- | C12           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3858				 | -->
+<!-- | C14           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3859	 | -->
+<!-- | C15           | Google Closure   | java.lang.IllegalStateException  |	 Closed Issue: https://github.com/google/closure-compiler/issues/3380			 | -->
 
 ### Table 3: Inputs generated by mutation strategy and Table 4: Analysis of all saved inputs with global hints
 
