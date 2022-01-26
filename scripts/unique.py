@@ -35,6 +35,9 @@ maxdepth=3
 bugs = {}
 
 shutil.rmtree(outputdir,True)
+outputDir = sys.argv[2]
+
+print("Saving results to " + sys.argv[2])
 
 fnames =[]
 for project in projects:
