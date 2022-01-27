@@ -213,6 +213,9 @@ The workflow consists of the following jobs:
 
 We are happy to execute this workflow on our infrastructure for researchers who make pull requests on CONFETTI, and we are also excited to work with maintainers of other tools (like [rohanpadhye's JQF](http://github.com/rohanpadhye/JQF/)) to bring continuous evaluation workflows into the wider community and develop best practices for their design and maintenance.
 
+## Building and Running CONFETTI outside of this artifact
+CONFETTI can also be built and run outside of this artifact VM. The README in [the CONFETTI git repo](https://github.com/neu-se/confetti) explains how. We have also archived this git repository directly in our [FigShare artifact](https://doi.org/10.6084/m9.figshare.16563776) to ensure long-term availability.
+
 ## Contact 
 Please feel free to [open an issue on GitHub](https://github.com/neu-se/CONFETTI/issues) if you run into any issues with CONFETTI. For other matters, please direct your emails to [Jonathan Bell](mailto:jon@jonbell.net).
 
