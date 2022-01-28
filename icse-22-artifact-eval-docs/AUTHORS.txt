@@ -1,0 +1,15 @@
+Cite this artifact as:
+Kukucka, James; Ganchinho de Pina, Luis Gabriel; Ammann, Paul; Bell, Jonathan (2022): CONFETTI: Amplifying Concolic Guidance for Fuzzers. figshare. Software. https://doi.org/10.6084/m9.figshare.16563776.
+
+Or, in BibTex:
+```
+@misc{confettiArtifact,
+	title={{CONFETTI}: Amplifying Concolic Guidance for Fuzzers},
+	url={https://figshare.com/articles/software/CONFETTI_Amplifying_Concolic_Guidance_for_Fuzzers/16563776},
+	DOI={10.6084/m9.figshare.16563776},
+	publisher={figshare},
+	author={Kukucka, James and Ganchinho de Pina, Luis Gabriel and Ammann, Paul and Bell, Jonathan},
+	year={2022},
+	month={Jan}
+}
+```

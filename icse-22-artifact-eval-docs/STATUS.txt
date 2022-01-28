@@ -1,0 +1,33 @@
+We seek the following badges for this artifact:
+
+## Available
+Our artifact is permanently archived on FigShare, has a DOI, and is made available under the BSD 2-clause license. Hence, we believe that we satisfy the requirements for "Available"
+
+## Functional
+It is sometimes unclear if Reusable implies Functional, and whether it is possible to obtain both badges or only one. If we may receive only one, then we would certainly like to receive the "Reusable" badge. We provide our justification for "functional" here, and expand on why we believe our artifact deserves "reusable" below.
+
+Our artifact contains an extremely length README, documenting the process of exercising it.
+
+The results that it produces are consistent with those in the paper.
+
+The artifact can be used to reproduce the results in our paper. Our artifact includes the primary data that we collected from our fuzzing experiments, allowing a reviewer or future researcher to reproduce the results that we collected from that experiment. Our artifact also includes the scripts needed to reproduce the entire 24 hour, 20 trial, 3 fuzzer, 5 target application matrix evaluation (300 x 24 hours), and for convenience, we provide a much shorter evaluation option to demonstrate functionality (10 minutes x 1 trial x 3 fuzzer x 5 target applications takes ~3 hours to run). Hence, it is exercisable.
+
+We clearly indicate multiple paths through our artifact to allow reviewers to check functionality in minutes, or scrutinize the results closer through a three hour evaluation.
+
+We provide a citation in our artifact's README, and on our FigShare entry
+
+
+## Reusable
+To the extent that there are norms and standards for artifacts of this type, we believe that we have exceeded them, and hence request the "Reusable" badge. We consider the artifact 'Replication Package for "Semantic Fuzzing with Zest"' (ISSTA 2019 Distinguished Artifact Award - https://doi.org/10.1145/3339069 ) as a comparable artifact - we provide similar instructions and pre-baked results, and also include the continuous integration artifact described below.
+
+Executing a large-scale fuzzing campaign is computationally challenging; this artifact provides multiple paths to enable others to repeat our evaluation.
+
+We believe that our level of documentation exceeds the norms, as does the degree to which we provide pre-computed results to ease evaluation and comparison.
+
+To facilitate reuse by researchers who have the capabilities to process our result files directly, we make all of our raw results directly available on our FigShare artifact, in addition to including them in the virtual machine that we have asked you to review.
+
+To support our continued maintenance of CONFETTI and to make easy for us and others to execute performance evaluations of CONFETTI, we have designed a GitHub Actions workflow that automatically executes the entire evaluation that is described in this artifact. Frankly, we do not know what role such an artifact should play in artifact evaluation: the continuous integration workflow certainly makes CONFETTI easier to reuse, but it also includes significant coupling to GitHub Actions and our HPC cluster, which might make it more difficult for future researchers to use should either of those two resources disappear.
+
+We hope that this aspect of our artifact will be most useful in the immediate future, and provide our VM to support long-term replicability. We are unaware of any prior work that offers a CI workflow like this, and hope that by publishing this artifact, we may spur future developments and collaborations in automating the evaluation of fuzzers.
+
+For example, we found this workflow extremely useful for preparing the [final pull request](https://github.com/rohanpadhye/JQF/pull/171) that we made to the JQF maintainers to resolve the performance issues that are discussed in section 5 (lines 1021-1026), as it was necessary to compare several design alternatives to find the best performing solution. You can find several such reports linked on that pull request, or view [one of the most recent reports](https://ci.in.ripley.cloud/logs/public/jon-bell/JQF/d4bdc3392ba1dffff8ab105a1876d3c0dee1bd9a/Gold%20evaluation%20-%2024%20hours,%2020%20trials/1703015546/1/site/). This report includes a comparison of two branches of JQF (`fast-collision-free-coverage` and `reporting-ci`), where `fast-collision-free-coverage` (`d4bdc3`) includes our performance fixes, and `reporting-ci` is the baseline version of JQF (modified only to be compatible with our CI infrastructure).

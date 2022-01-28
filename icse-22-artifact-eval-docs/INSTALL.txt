@@ -1,0 +1,5 @@
+Install the artifact by:
+1. Downloading the .vmdk image linked in the README
+2. Creating a new virtual machine with 4 CPUs and 32GB RAM as specified in the README
+
+The username and password to login to this VM are both icse22ae, and it has an SSH server running on port 22. Please see complete instructions on the use of the artifact VM in the README. The README contains suggested paths to quickly (or less quickly) evaluate this artifact.
