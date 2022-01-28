@@ -61,7 +61,7 @@ The username and password to login to this VM are both `icse22ae`, and it has an
 
 We provide a brief overview of the software contained in the artifact to help future researchers who may want to modify CONFETTI or any of its key dependencies. We expect that this use-case (modifying the code, recompiling, and running it) will be best supported by our Continuous Integration artifact described above, but the VM provides the most resilience to bitrot, as it includes all external dependencies and can be executed without being connected to the internet.
 
-The artifact VM contains a suitable JVM, OpenJDK 1.8.0_312, installed to `/usr/lib/jvm/java-8-openjdk-amd64/`. The CONFETTI artifact is located in `/home/icse22ae/confetti-artifact`, and contains compiled versions of all dependencies. The artifact directory contains scripts to run the evaluation, and we include the source code of all of CONFETTI's key components, which can be modified and built without connecting to the internet to fetch any additional dependencies. These projects can be re-built by running the `scripts/build-all.sh` or `scripts/build/[project].sh` script.
+The artifact VM contains a suitable JVM, OpenJDK 1.8.0_312, installed to `/usr/lib/jvm/java-8-openjdk-amd64/`. The CONFETTI artifact is located in `/home/icse22ae/confetti-artifact`, and contains compiled versions of all dependencies. The artifact directory contains scripts to run the evaluation, and we include the source code of all of CONFETTI's key components, which can be modified and built without connecting to the internet to fetch any additional dependencies. 
 
 The key software artifacts are located in the `software` directory of the artifact:
 * `jqf`: CONFETTI (named `jqf` for historical purposes), specifically [neu-se/confetti](https://github.com/neu-se/confetti)@[icse-22-evaluation](https://github.com/neu-se/CONFETTI/releases/tag/icse-22-evaluation) - The revision of CONFETTI that we evaluated
@@ -71,6 +71,11 @@ The key software artifacts are located in the `software` directory of the artifa
 * `jacoco-fix-exception-after-branch`: [neu-se/jacoco](https://github.com/neu-se/jacoco/)@[fix-exception-after-branch](https://github.com/neu-se/jacoco/tree/fix-exception-after-branch) - Patched version of JaCoCo that we used to collect coverage. We found that JaCoCo wouldn't record a branch edge as covered if it was covered, and then immediately after an exception was thrown. This complicated debugging and analysis of the JaCoCo HTML output reports; this branch has that bug fixed, and it is this version of JaCoCo that is included in the artifact, and in the `software/jqf/jacoco-jars` directory.
 * `software/z3`: Binaries from [Z3Prover/z3](https://github.com/Z3Prover/z3), release version [4.6.0](https://github.com/Z3Prover/z3/releases/tag/z3-4.6.0), of the `x64-ubuntu-16.04` flavor. This is the version of Z3 that we used in our evaluation.
 
+We also include all of the dependencies for all of the fuzzing targets that we studied.
+We do not exhaustively document their contents, but they can be found in the `software/` directory.
+The scripts to run our experiments apply Knarr's instrumentation to each of those dependencies, producing the `*-inst` directories in the `software` directory.
+We can not imagine the circumstances where it would be necessary to re-instrument those dependencies, but if needed, this can be accomplished with the `scripts/build/instrument-experiments.sh` script.
+
 Other software installed in the VM to support running the experiment scripts are:
 * SSH server: we find it easiest to run VSCode outside of the VM, and use the "connect to remote" feature to connect your local VSCode instance to the artifact
 * R: Plots and tables are generated using R. Installed packages include `readr, tidyr, plyr, ggplot2, xtable, viridis, fs, forcats`
@@ -78,8 +83,20 @@ Other software installed in the VM to support running the experiment scripts are
 
 **All commands below should be executed in the `confetti-artifact` directory in the artifact**
 
+### Re-building dependencies offline
+Since CONFETTI depends so heavily on the projects `knarr` and `green`, we include the source code for those projects in this artifact as well, so that future researchers who would like to modify those dependencies and rebuild CONFETTI will always have access to them.
+If you would like to confirm that CONFETTI and its dependencies can be re-compiled in an offline mode (with no network connectivity), you may follow the following steps:
+* `green`: In the directory `software/green/green` run `ant clean install`
+* `knarr`: In the directory `software/knarr` run `mvn -o install`
+* `jqf` (CONFETTI): In the directory `software/jqf` run `mvn -o install`
+* `jqf-vanilla`: In the directory `software/jqf-vanilla` run `mvn -o install`
+* `jacoco-fix-exception-after-branch`: In the directory `software/jacoco-fix-exception-after-branch` run `mvn -o -DskipTests install` (our patch broke several brittle tests; we manually confirmed the correct behavior but haven't repaired the tests)
+
+
 ### Running a fuzzing campaign in the artifact
-To run a fuzzing campaign in the artifact, use the script `scripts/runExpInScreen.sh`, which takes a single parameter: the experiment to run. This script will run the specified experiment with a timeout of 24 hours, if you would like it to terminate sooner, you can end it by typing control-C.
+To run a fuzzing campaign in the artifact, use the script `scripts/runExpInScreen.sh`, which takes a single parameter: the experiment to run.
+After several seconds, you will see a screen open that is labeled "Zest: Validity Fuzzing with Parametric Generators", and displaying various live-updating statistics of the fuzzing campaign.
+This script will run the specified experiment with a timeout of 24 hours, if you would like it to terminate sooner, you can end it by typing control-C.
 
 The experiment name is the combination of the target application to fuzz with the fuzzer to evalaute. The list of target application names is  (`ant`, `bcelgen`, `closure`, `maven`, `rhino`). The list of fuzzers to evaluate are `knarr-z3`, `knarr-z3-no-global-hint`, and `jqf`. Within this artifact, `knarr-z3` stands in for the name `CONFETTI`, and `knarr-z3-no-global-hint` stands in for `CONFETTI-NoGlobalHint` (it is perhaps not unusual for names of papers to be decided at the last minute prior to paper submission, and we include here the artifact of scripts we used to prepare the results in the paper, before that final name change). 
 
