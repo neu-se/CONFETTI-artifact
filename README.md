@@ -142,7 +142,9 @@ These graphs are generated in two steps:
 ### Table 2: Bug detectability rate
 This table is built based on the manual analysis of figures discussed above in the context of Table 1. A more detailed description of the bugs, along with a link to their respective issue tracker (where applicable for newly discovered bugs), is included in the table below. 
 
-In order to properly compare against the state-of-the-art (JQF+Zest) we elected to test against the same version of software that the authors did, which was an earlier version than the most current release of the respective software at the time of publication. Becauses of this, some newly discovered bugs (N-Days) were unable to be replicated in the latest release of the respective target and were not reported to developers. However, all stacktraces are included in this artifact for completeness (as discussed in the Table 1 section above).
+In order to properly compare against the state-of-the-art (JQF+Zest) we elected to test against the same version of software that the authors did, which was an earlier version than the most current release of the respective software at the time of publication. Becauses of this, some newly discovered bugs (N-Days) were unable to be replicated in the latest release of the respective target and were not reported to developers. However, all stacktraces are included in this artifact for completeness (as discussed in the Table 1 section above). 
+
+The table below idenitifes the bugs reported in the accepted paper, along with a singular stack hash that is representative of the bug. In performing manual analysis, we may examine more stack hashes that correspond to the same bug, but those are not included here for space purposes.
 
 | Bug ID (Hash)      | Target   |Description   | Status/ Issue Tracker Link|
 | ------------- | ------------- |-------------------| -------------------|
