@@ -1,3 +1,14 @@
+# Accessing the artifact
+You may access our artifact VM on FigShare. It is available here:
+https://doi.org/10.6084/m9.figshare.16563776
+
+You should download the CONFETTI ICSE 2022 Virtual Machine.vmdk file.
+
+The username and password to login to this VM are both `icse22ae`, and it has an SSH server running on port 22. Please see complete instructions on the use of the artifact VM below.
+
+You may note that there are many additional files there: we have also uploaded various artifacts of our development and evaluation process. Any artifacts (e.g. primary data) that are needed to reproduce our experiments are included in the VM image; we expect that reviewers will evaluate our artifact primarily through the VM.
+
+
 # Artifact for CONFETTI: CONcolic Fuzzer Employing Taint Tracking Information
 Fuzz testing (fuzzing) allows developers to detect bugs and vulnerabilities in code by automatically generating defect-revealing inputs. Most fuzzers operate by generating inputs for applications and mutating the bytes of those inputs, guiding the fuzzing process with branch coverage feedback via instrumentation.
 Whitebox guidance (e.g., taint tracking or concolic execution) is sometimes integrated with coverage-guided fuzzing to help  cover tricky-to-reach branches that are guarded by complex conditions (so-called "magic values"). This integration typically takes the form of a targeted input mutation, for example placing particular byte values at a specific offset of some input in order to cover a branch. However, these dynamic analysis techniques are not perfect in practice, which can result in the loss of important relationships between input bytes and branch predicates, thus reducing the effective power of the technique.
@@ -219,21 +230,5 @@ CONFETTI can also be built and run outside of this artifact VM. The README in [t
 ## Contact 
 Please feel free to [open an issue on GitHub](https://github.com/neu-se/CONFETTI/issues) if you run into any issues with CONFETTI. For other matters, please direct your emails to [Jonathan Bell](mailto:jon@jonbell.net).
 
-## Citation
-Cite this artifact as:
-Kukucka, James; Ganchinho de Pina, Luis Gabriel; Ammann, Paul; Bell, Jonathan (2022): CONFETTI: Amplifying Concolic Guidance for Fuzzers. figshare. Software. https://doi.org/10.6084/m9.figshare.16563776.
-
-Or, in BibTex:
-```
-@misc{confettiArtifact,
-    title={{CONFETTI}: Amplifying Concolic Guidance for Fuzzers},
-    url={https://figshare.com/articles/software/CONFETTI_Amplifying_Concolic_Guidance_for_Fuzzers/16563776},
-    DOI={10.6084/m9.figshare.16563776},
-    publisher={figshare},
-    author={Kukucka, James and Ganchinho de Pina, Luis Gabriel and Ammann, Paul and Bell, Jonathan},
-    year={2022},
-    month={Jan}
-}
-```
 ## License
 CONFETTI is released under the BSD 2-clause license.

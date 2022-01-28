@@ -1,0 +1,4 @@
+Reviewers of this artifact should:
+* Have VirtualBox or VMWare available to run our VM. It requires 4 CPU cores, 32GB RAM, and the disk image is approximately 20 GB.
+* We recommend using VirtualBox over VMWare. We used the base VM image distributed by the artifact evaluation chairs, which we found could be fickle with VMWare, although we were ultimately able to make it work with both. 
+* In either solution, reviewers need to create a new VM (Linux 64bit) as specified above with 32GB RAM and 4 CPUs, and attach the provided VMDK as the first storage device (e.g. SATA port 0 on VirtualBox)
