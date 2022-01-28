@@ -25,8 +25,4 @@ Ideally, a reviewer of this artifact:
 To use our virtual machine artifact, a reviewer *must*:
 * Have at least 32 GB RAM free to assign to the VM
 * Have at least 4 CPU cores to assign to the VM
-* Have at least 100GB of storage to store the VM; more space may also be needed temporarily to extract the VM
-
-If the reviewer would also like to build our software outside of the VM, then they should have:
-* Mac OS X (11.x or 12.x) or Ubuntu (18 or 20) operating system
-* Java 8 JDK installed 
+* Have at least 20GB of storage to store the VM
