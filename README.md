@@ -75,6 +75,7 @@ We also include all of the dependencies for all of the fuzzing targets that we s
 We do not exhaustively document their contents, but they can be found in the `software/` directory.
 The scripts to run our experiments apply Knarr's instrumentation to each of those dependencies, producing the `*-inst` directories in the `software` directory.
 We can not imagine the circumstances where it would be necessary to re-instrument those dependencies, but if needed, this can be accomplished with the `scripts/build/instrument-experiments.sh` script.
+**Expected Errors**: The script that instruments class files may output a variety of `FileNotFoundException`s, `NullPointerException`s, and `ClassCastException`s - these can be ignored.
 
 Other software installed in the VM to support running the experiment scripts are:
 * SSH server: we find it easiest to run VSCode outside of the VM, and use the "connect to remote" feature to connect your local VSCode instance to the artifact
@@ -87,19 +88,24 @@ Other software installed in the VM to support running the experiment scripts are
 Since CONFETTI depends so heavily on the projects `knarr` and `green`, we include the source code for those projects in this artifact as well, so that future researchers who would like to modify those dependencies and rebuild CONFETTI will always have access to them.
 If you would like to confirm that CONFETTI and its dependencies can be re-compiled in an offline mode (with no network connectivity), you may follow the following steps:
 * `green`: In the directory `software/green/green` run `ant clean install`
-* `knarr`: In the directory `software/knarr` run `mvn -o install`
+* `knarr`: In the directory `software/knarr` run `mvn -o install`. 
 * `jqf` (CONFETTI): In the directory `software/jqf` run `mvn -o install`
 * `jqf-vanilla`: In the directory `software/jqf-vanilla` run `mvn -o install`
 * `jacoco-fix-exception-after-branch`: In the directory `software/jacoco-fix-exception-after-branch` run `mvn -o -DskipTests install` (our patch broke several brittle tests; we manually confirmed the correct behavior but haven't repaired the tests)
 
+If you would like to clean any of the maven projects so that you can build them "from scratch," you may do so using the command `mvn clean`.
 
 ### Running a fuzzing campaign in the artifact
-To run a fuzzing campaign in the artifact, use the script `scripts/runExpInScreen.sh`, which takes a single parameter: the experiment to run.
+
+Our artifact supports running the fuzzer in two ways: *interactively* (run one experiment at time, process results *manually*), and *headless* (run a complete suite of experiments, prepare results for automated analysis). If you are an ICSE 2022 artifact evaluator whose goal is to reproduce the complete suite of experiments, you should proceed directly to the "Running a Headless Experiment" section. If you are a researcher who is trying to actually reuse our tool and build on it, you may find the "Interactive" documentation more useful, and hence we provide both here.
+#### Running an Interactive Experiment
+To run a single fuzzing experiment in the artifact, use the script `scripts/runExpInScreen.sh`, which takes a single parameter: the experiment to run.
 After several seconds, you will see a screen open that is labeled "Zest: Validity Fuzzing with Parametric Generators", and displaying various live-updating statistics of the fuzzing campaign.
 This script will run the specified experiment with a timeout of 24 hours, if you would like it to terminate sooner, you can end it by typing control-C.
 
 The experiment name is the combination of the target application to fuzz with the fuzzer to evalaute. The list of target application names is  (`ant`, `bcelgen`, `closure`, `maven`, `rhino`). The list of fuzzers to evaluate are `knarr-z3`, `knarr-z3-no-global-hint`, and `jqf`. Within this artifact, `knarr-z3` stands in for the name `CONFETTI`, and `knarr-z3-no-global-hint` stands in for `CONFETTI-NoGlobalHint` (it is perhaps not unusual for names of papers to be decided at the last minute prior to paper submission, and we include here the artifact of scripts we used to prepare the results in the paper, before that final name change). 
 
+#### Running a Headless Experiment
 We have also included a script, `scripts/runOneExperiment.php`, that we used to automate running a fuzzing experiment in a "headless" mode, where the experiment runs for 24 hours, then copies the results to an Amazon S3 bucket, and then shuts down the VM. This is the exact script that we used to run our experiment on EC2. There is additional configuration necessary to provision an S3 bucket for use with the script; if a reviewer is familiar with S3 already then the configuration should be fairly self explanatory, but providing detailed instructions to provision a large-scale experiment is a non-goal for this artifact.
 
 🎂 *Pre-bake available* 🎂 The results presented in our paper are the result of running each of these experiments 20 times for 24 hour each. We include the raw results produced by running our `scripts/runOneExperiment.php` script in the directory `icse_22_fuzz_output`.  You can also download these results direclty from our [FigShare artifact](https://doi.org/10.6084/m9.figshare.16563776), they are included int he archive `fuzz_output.tgz`. In these result files, note that the name "Knarr-z3" is used in place of "CONFETTI" and "Knarr-z3-no-global-hint" in place of "CONFETTI no global hints" - in our early experiments we also considered a variety of other system designs, Knarr-z3 was the design that eventually evolved into CONFETTI.

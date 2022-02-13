@@ -1,6 +1,7 @@
 #!/bin/bash
 export FUZZ_OUTPUT=/home/icse22ae/confetti-artifact/local_eval_output
 export DURATION=600
+mkdir -p $FUZZ_OUTPUT
 
 php scripts/runOneSmokeTest.php ant-jqf
 php scripts/runOneSmokeTest.php bcelgen-jqf
